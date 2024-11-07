@@ -1,8 +1,6 @@
 
-import { sql } from 'kysely'
 import { db } from '../kysely'
-import type { Person, NewPerson, PersonUpdate } from '../schema/schema'
-
+import type { NewPerson, Person, PersonUpdate } from '../schema/schema'
 
 export async function findPersonById(id: number) {
   return await db.selectFrom('person')

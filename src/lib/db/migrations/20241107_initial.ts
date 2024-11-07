@@ -1,9 +1,7 @@
-import { Kysely, sql } from 'kysely';
+import { sql, type Migration } from 'kysely';
 
-type CustomMigration = {
+type CustomMigration = Migration & {
   name: string;
-  up: (db: Kysely<any>) => Promise<void>;
-  down: (db: Kysely<any>) => Promise<void>;
 }
 
 const migration: CustomMigration = {
