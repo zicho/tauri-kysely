@@ -19,7 +19,7 @@ export default {
   daisyui: {
     themes: [
       {
-        mytheme: {
+        app: {
           "primary": "#327032",
           "primary-content": "#FFFFFF",
 
@@ -61,7 +61,6 @@ export default {
           "--tab-radius": "0.5rem",
         },
       },
-      'valentine', // Including the existing theme
     ],
   },
 } as Config;

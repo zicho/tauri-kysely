@@ -45,6 +45,6 @@ https://tauri.app/start/
 ### DaisyUI
 https://daisyui.com/docs/
 
-#### Kysely
+### Kysely
 https://kysely.dev/
 

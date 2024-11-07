@@ -13,7 +13,7 @@ export interface Database {
 }
 
 // This interface describes the `person` table to Kysely. Table
-// interfaces should only be used in the `Database` type above
+// interfaces should only be used in the `Database` type above 
 // and never as a result type of a query!. See the `Person`,
 // `NewPerson` and `PersonUpdate` types below.
 export interface PersonTable {
