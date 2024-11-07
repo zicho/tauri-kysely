@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { GlobalState, preventDefault } from '$lib';
-	import { db } from '$lib/db/kysely';
 	import { createPerson } from '$lib/db/repos/personRepository';
 	const gs = new GlobalState();
 
@@ -11,7 +10,7 @@
 
 	const add = async () => {
 		await createPerson({
-			first_name: 'Martin', gender: "man", metadata: "test"
+			first_name: 'Martin', gender: "man"
 		});
 	};
 </script>
