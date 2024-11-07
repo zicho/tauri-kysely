@@ -1,0 +1,14 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+	body {
+		@apply font-sans tracking-wider; /* Applies font and global tracking */
+	}
+
+  .badge {
+    @apply p-4;
+  }
+}
