@@ -1,10 +1,7 @@
-import { sql, type Migration } from 'kysely';
+import { sql } from 'kysely';
+import type { NamedMigration } from '../migrations';
 
-type CustomMigration = Migration & {
-  name: string;
-}
-
-const migration: CustomMigration = {
+const migration: NamedMigration = {
   name: "20241107_initial",
   up: async (db) => {
     await db.schema

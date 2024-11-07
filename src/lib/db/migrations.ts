@@ -2,6 +2,10 @@ import { type Migration } from "kysely";
 import initial from "./migrations/20241107_initial";
 // Import more migrations as needed
 
+export type NamedMigration = Migration & {
+  name: string; // might be excessive but I like it :)
+}
+
 export const migrations: Record<string, Migration> = {
   [initial.name]: {
     up: initial.up,
