@@ -8,3 +8,16 @@ export const db = new Kysely<DB>({
     database: Database.load(`sqlite:test.db`)
   }),
 })
+
+// not used: better-sqlite3 adapter
+
+// import { Kysely, SqliteDialect } from 'kysely'
+// import DatabaseSqlite from 'better-sqlite3'
+// import type { Database as DB } from './schema/schema'
+
+// // Use better-sqlite3 with SqliteDialect for Kysely
+// export const db = new Kysely<DB>({
+//   dialect: new SqliteDialect({
+//     database: new DatabaseSqlite('test.db'), // specify your SQLite database file path
+//   }),
+// })
