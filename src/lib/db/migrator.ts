@@ -1,44 +1,45 @@
-import { promises as fs } from 'fs'
-import * as path from 'path'
-import { fileURLToPath } from 'url'
-import {
-  FileMigrationProvider,
-  Migrator
-} from 'kysely'
-import { db } from './kysely'
+import { Migrator, type Migration } from 'kysely';
+import { db } from './kysely';
 
-// Define __dirname and __filename in ESM
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+async function loadMigrations(): Promise<Record<string, Migration>> {
+  const modules = import.meta.glob('./migrations/*.ts');
+  const migrations: Record<string, Migration> = {};
 
-async function migrateToLatest() {
-  const migrator = new Migrator({
-    db,
-    provider: new FileMigrationProvider({
-      fs,
-      path,
-      // This needs to be an absolute path.
-      migrationFolder: path.join(__dirname, './migrations'),
-    }),
-  })
+  // Iterate over each module and dynamically import it
+  for (const [path, resolver] of Object.entries(modules)) {
+    const module = await resolver();
 
-  const { error, results } = await migrator.migrateToLatest()
+    // Extract the migration name from the file path
+    const migrationName = path.split('/').pop()?.replace('.ts', '') || '';
 
-  results?.forEach((it) => {
-    if (it.status === 'Success') {
-      console.log(`migration "${it.migrationName}" was executed successfully`)
-    } else if (it.status === 'Error') {
-      console.error(`failed to execute migration "${it.migrationName}"`)
+    // Check if the module has 'up' function
+    if (typeof module.up === 'function') {
+      migrations[migrationName] = {
+        up: module.up,
+        down: module.down ?? (async () => {}),
+      };
+    } else {
+      console.warn(`Migration file ${path} does not have an 'up' export.`);
     }
-  })
-
-  if (error) {
-    console.error('failed to migrate')
-    console.error(error)
-    process.exit(1)
   }
 
-  await db.destroy()
+  return migrations;
 }
 
-migrateToLatest()
+export async function runMigrations() {
+  const migrator = new Migrator({
+    db,
+    provider: {
+      getMigrations: loadMigrations, // Use the loadMigrations function
+    },
+  });
+
+  // Run pending migrations
+  const { error } = await migrator.migrateToLatest();
+  if (error) {
+    console.error('Migration error:', error);
+    throw error;
+  } else {
+    console.log('Migrations ran successfully.');
+  }
+}

@@ -41,27 +41,13 @@ export async function findPeople(criteria: Partial<Person>) {
   return await query.selectAll().execute()
 }
 
-// Define a function to create the table if it doesn't exist
-async function ensurePersonTableExists() {
-  await db.schema
-    .createTable('person')
-    .ifNotExists()
-    .addColumn('id', 'integer', col => col.primaryKey().autoIncrement())
-    .addColumn('first_name', 'text', col => col.notNull())
-    .addColumn('last_name', 'text') // Nullable by default
-    .addColumn('gender', 'text', col => col.notNull().check(sql`gender IN ('man', 'woman', 'other')`))
-    .addColumn('created_at', 'timestamp', col => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-    .addColumn('metadata', 'json') // JSON storage, typically text in SQLite, JSONB in PostgreSQL
-    .execute()
-}
-
 export async function updatePerson(id: number, updateWith: PersonUpdate) {
   await db.updateTable('person').set(updateWith).where('id', '=', id).execute()
 }
 
 export async function createPerson(person: NewPerson) {
 
-  await ensurePersonTableExists()
+  console.log("tyee");
 
   return await db.insertInto('person')
     .values(person)
