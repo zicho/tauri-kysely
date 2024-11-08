@@ -1,6 +1,16 @@
 
 import { db } from '../kysely'
 import type { NewPerson, Person, PersonUpdate } from '../schema/schema'
+import type { Database } from '../schema/schema'
+import type { Selectable } from 'kysely'
+import { BaseRepository } from './baseRepository'
+
+export class PersonRepository extends BaseRepository<'person'> {
+  constructor() {
+    super('person')
+  }
+}
+
 
 export async function findPersonById(id: number) {
   return await db.selectFrom('person')

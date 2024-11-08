@@ -53,7 +53,7 @@
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-0 text-xl">
 			<!-- Sidebar content here -->
 			<li class="active"><a href="/" class="active">Sidebar Item 1</a></li>
-			<li><a href="/">Sidebar Item 2</a></li>
+			<li><a href="/test">Test</a></li>
 		</ul>
 	</div>
 </div>

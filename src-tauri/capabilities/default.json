@@ -12,6 +12,7 @@
     "sql:allow-execute",
     "fs:default",
     "fs:allow-app-write",
-    "fs:allow-create"
+    "fs:allow-create",
+    "dialog:default"
   ]
 }
