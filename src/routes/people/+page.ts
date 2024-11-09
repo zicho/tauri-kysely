@@ -1,10 +1,16 @@
-import { db } from '$lib/db/kysely';
+import { PersonRepository } from '$lib/db/repos/PersonRepository';
+import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
 export const load = (async () => {
-  const persons = await db.selectFrom("person").selectAll().execute();
+
+  const getPersons = await PersonRepository.getAll();
+
+  if (!getPersons.success) {
+    error(500);
+  }
 
   return {
-    persons
-  };
+    persons: getPersons.result!
+  }
 }) satisfies PageLoad;

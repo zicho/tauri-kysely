@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { GlobalState, preventDefault } from '$lib';
-	import { createPerson } from '$lib/db/repos/personRepository';
+	import { createPerson } from '$lib/db/repos/PersonRepository';
 	const gs = new GlobalState();
 
 	$inspect(gs.greet, gs.name);

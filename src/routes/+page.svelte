@@ -4,7 +4,7 @@
 
 	async function onclick() {
 		ModalHelper.messageDialog({
-			message: 'Poo'
+			message: 'I am a system modal'
 		});
 	}
 </script>
