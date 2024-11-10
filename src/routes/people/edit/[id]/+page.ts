@@ -4,7 +4,7 @@ import type { PageLoad } from './$types';
 
 export const load = (async ({params}) => {
 
-    const getPerson = await PersonRepository.getById({id: Number(params.id)})
+    const getPerson = await new PersonRepository().getById({id: Number(params.id)})
 
     if(!getPerson.success) {
         error(500)

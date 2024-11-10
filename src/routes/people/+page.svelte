@@ -25,7 +25,7 @@
 	}
 
 	async function confirmDelete(id: number) {
-		const result = await PersonRepository.delete({ id });
+		const result = await new PersonRepository().delete({ id });
 
 		if (result.success) {
 			persons = persons.filter((person) => person.id !== id);

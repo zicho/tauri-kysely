@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { PersonRepository } from '$lib/db/repos/PersonRepository.js';
+	import { PersonRepository } from '$lib/db/repos/PersonRepository';
 	import StandardPageLayout from '$lib/layouts/StandardPageLayout.svelte';
 
 	let { data } = $props();
 	let { person } = $state(data);
 
 	const onsubmit = async (e: Event) => {
-        const result = await PersonRepository.update({id: person.id, data: person})
+        const result = await new PersonRepository().update({id: person.id, data: person})
 
         if(result.success) {
             goto("/people")

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { GlobalState, preventDefault } from '$lib';
-	import { createPerson } from '$lib/db/repos/PersonRepository';
+	import { PersonRepository } from '$lib/db/repos/PersonRepository';
 	const gs = new GlobalState();
 
 	$inspect(gs.greet, gs.name);
@@ -9,8 +9,11 @@
 	const onclick = () => gs.reset();
 
 	const add = async () => {
-		await createPerson({
-			first_name: 'Martin', gender: "man"
+		await new PersonRepository().create({
+			data: {
+				first_name: 'Martin',
+				gender: 'man'
+			}
 		});
 	};
 </script>

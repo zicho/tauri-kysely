@@ -14,7 +14,7 @@
 		e.preventDefault();
 		if (!person) return;
 
-		let result = await PersonRepository.create({ person });
+		let result = await new PersonRepository().create({ data: person });
 
 		if (result.success) {
 			ModalHelper.confirmDialog({
