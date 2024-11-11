@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import Table from '$lib/components/table/Table.svelte';
 	import { PersonRepository } from '$lib/db/repos/PersonRepository.js';
 	import ModalHelper from '$lib/helpers/ModalHelper';
-	import StandardPageLayout from '$lib/layouts/StandardPageLayout.svelte';
 	import { getUiState } from '$lib/state/ui.svelte.js';
-	import { Edit, Trash2 } from 'lucide-svelte';
 
 	const uiState = getUiState();
 	uiState.setPageTitle('People');
@@ -64,8 +62,22 @@
 	}
 </script>
 
-<div class="flex flex-col">
-	<input bind:value={searchQuery} />
+<Table
+	primaryKey="id"
+	data={persons}
+	headers={[
+		{
+			name: 'Name',
+			property: 'first_name'
+		},
+		{
+			name: 'Gender',
+			property: 'gender'
+		}
+	]}
+/>
+
+<!-- <div class="flex flex-col">
 	<button class="btn btn-error" disabled={numSelected === 0} onclick={deleteRange}
 		><Trash2 />Delete selected</button
 	>
@@ -84,7 +96,7 @@
 							/>
 						</label>
 					</th>
-					<th>Name</th>
+					<th>Name <input bind:value={searchQuery} /></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -107,4 +119,4 @@
 			</tbody>
 		</table>
 	</div>
-</div>
+</div> -->
