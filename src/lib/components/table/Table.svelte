@@ -58,7 +58,7 @@
 		<table class="table table-xs">
 			<thead>
 				<tr>
-					<th>
+					<th class="w-10">
 						<label>
 							<input
 								type="checkbox"
@@ -70,7 +70,7 @@
 						</label>
 					</th>
 					{#each headers as header}
-						<th>
+						<th class="px-4 py-2">
 							<span class="mr-4">{header.name}:</span>
 
 							<input
@@ -81,24 +81,28 @@
 							/>
 						</th>
 					{/each}
-					<th></th>
+					<th class="w-20"></th> <!-- Fixed width for the action column -->
 				</tr>
 			</thead>
 			<tbody>
 				{#each filteredData as row}
-					<tr>
-						<th
-							><label>
+					<tr class="hover:bg-gray-100 transition-all">
+						<td class="px-4 py-2">
+							<label>
 								<input type="checkbox" class="checkbox" bind:checked={row.selected} />
-							</label></th
-						>
+							</label>
+						</td>
 						{#each headers as header}
-							<td>{row[header.property]}</td>
+							<td class="px-4 py-2">{row[header.property]}</td>
 						{/each}
-						<th class="flex justify-end gap-x-8 mr-8"
-							><button><Edit /></button>
-							<button><Trash2 class="text-error" /></button></th
-						>
+						<td class="px-4 py-2 flex justify-end gap-x-4">
+							<button class="text-gray-600 hover:text-blue-600">
+								<Edit class="w-5 h-5" />
+							</button>
+							<button class="text-error hover:text-red-600">
+								<Trash2 class="w-5 h-5" />
+							</button>
+						</td>
 					</tr>
 				{/each}
 			</tbody>
