@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { TableRowModelMapper } from '$lib/viewmodels/ListPeopleViewModel';
-	import { Trash2, Edit } from 'lucide-svelte';
+	import { Trash2, Edit, CircleX } from 'lucide-svelte';
 
 	type TableHeader<T> = {
 		name: string;
@@ -57,8 +57,8 @@
 	<div class="overflow-x-auto">
 		<table class="table table-xs">
 			<thead>
-				<tr>
-					<th class="w-10">
+				<tr class="px-8">
+					<th class="w-10 px-4 py-2">
 						<label>
 							<input
 								type="checkbox"
@@ -70,18 +70,34 @@
 						</label>
 					</th>
 					{#each headers as header}
-						<th class="px-4 py-2">
-							<span class="mr-4">{header.name}:</span>
-
-							<input
-								type="text"
-								class="input input-bordered w-full max-w-xs text-xs max-h-8 px-2"
-								bind:value={filters[header.property]}
-								placeholder={`${header.name}`}
-							/>
-						</th>
+          <th class="px-4 py-2">
+            <div class="flex items-center gap-2 w-full">
+              <span class="mr-4 text-sm">{header.name}:</span>
+          
+              <label class="input input-bordered flex items-center gap-2 w-full h-8 text-xs px-3">
+                <input
+                  type="text"
+                  class="grow border-none focus:ring-0 px-0 text-xs"
+                  bind:value={filters[header.property]}
+                  placeholder={`${header.name}`}
+                />
+                <button
+                  type="button"
+                  class="text-gray-600 hover:text-gray-900"
+                  onclick={() => {
+                    filters[header.property] = '' as keyof T;
+                  }}
+                >
+                  <CircleX class="w-4 h-4" />
+                </button>
+              </label>
+            </div>
+          </th>
+          
+          
 					{/each}
-					<th class="w-20"></th> <!-- Fixed width for the action column -->
+					<th class="w-20 px-4 py-2"></th>
+					<!-- Fixed width for the action column -->
 				</tr>
 			</thead>
 			<tbody>
