@@ -1,6 +1,7 @@
 import { PersonRepository } from '$lib/db/repos/PersonRepository';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
+import { ListPeopleViewModelMapper } from '$lib/viewmodels/ListPeopleViewModel';
 
 export const load = (async () => {
 
@@ -11,6 +12,6 @@ export const load = (async () => {
   }
 
   return {
-    persons: getPersons.result!
+    persons: ListPeopleViewModelMapper.map(getPersons.result!)
   }
 }) satisfies PageLoad;
