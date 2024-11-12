@@ -1,8 +1,10 @@
 <script lang="ts">
 	import Table from '$lib/components/table/Table.svelte';
 	import { PersonRepository } from '$lib/db/repos/PersonRepository.js';
+	import type { Person } from '$lib/db/schema/schema.js';
 	import ModalHelper from '$lib/helpers/ModalHelper';
 	import { getUiState } from '$lib/state/ui.svelte.js';
+	import type { TableRowModel } from '$lib/viewmodels/ListPeopleViewModel.js';
 
 	const uiState = getUiState();
 	uiState.setPageTitle('People');
@@ -10,61 +12,44 @@
 	let { data } = $props();
 	let { persons } = $state(data);
 
-	let searchQuery = $state('');
-	let allSelected = $state(false);
+	// async function onDelete(id: number) {
+	// 	ModalHelper.confirmDialog({
+	// 		message: 'Delete person?',
+	// 		confirmAction: () => confirmDelete(id)
+	// 	});
+	// }
 
-	let numSelected = $derived(persons.filter((x) => x.selected).length);
-	let indeterminate = $derived(numSelected > 0 && numSelected < persons.length);
+	async function onDelete(p: Person) {
+		const result = await new PersonRepository().delete({ id: p.id });
 
-	let filteredData = $derived(
-		persons.filter(
-			(x) =>
-				x.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				x.last_name?.toLowerCase().includes(searchQuery.toLowerCase())
-		)
-	);
-
-	async function showDeleteModal(id: number) {
-		ModalHelper.confirmDialog({
-			message: 'Delete person?',
-			confirmAction: () => confirmDelete(id)
-		});
-	}
-
-	async function confirmDelete(id: number) {
-		const result = await new PersonRepository().delete({ id });
+		console.dir(p.id)
 
 		if (result.success) {
-			persons = persons.filter((person) => person.id !== id);
+			console.log("length:", persons.length)
+			console.log("id deleted", p.id)
+			
+			persons = persons.filter((person) => person.id !== p.id);
+			console.log("length:", persons.length)
+			
 			ModalHelper.messageDialog({ message: 'Person was deleted!' });
 		} else {
 			ModalHelper.messageDialog({ message: 'Person was not deleted due to error' });
 		}
 	}
 
-	async function onAllSelectedClick() {
-		const filteredIds = filteredData.map((person) => person.id);
-
-		persons = persons.map((person) => ({
-			...person,
-			selected: filteredIds.includes(person.id) ? !allSelected : person.selected
-		}));
-	}
-
 	async function deleteRange() {
-		const ids = filteredData.filter((x) => x.selected).map((x) => x.id);
+		const ids = persons.filter((x) => x.selected).map((x) => x.id);
 		await new PersonRepository().deleteRange({
 			ids
 		});
 
 		persons = persons.filter((person) => !ids.includes(person.id));
-		allSelected = false;
 	}
 </script>
 
 <Table
 	primaryKey="id"
-	data={persons}
+	bind:data={persons}
 	headers={[
 		{
 			name: 'Name',
@@ -75,6 +60,7 @@
 			property: 'gender'
 		}
 	]}
+	{onDelete}
 />
 
 <!-- <div class="flex flex-col">

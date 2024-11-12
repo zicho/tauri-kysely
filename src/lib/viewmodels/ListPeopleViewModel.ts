@@ -11,7 +11,7 @@ export class ListPeopleViewModelMapper {
   }
 }
 
-type TableRowModel<T> = T & { selected: boolean };
+export type TableRowModel<T> = T & { selected: boolean };
 
 export class TableRowModelMapper {
   static map<T>(data: T[]): TableRowModel<T>[] {
