@@ -6,6 +6,8 @@ export const load = (async ({params}) => {
 
     const getPerson = await new PersonRepository().getById({id: Number(params.id)})
 
+    console.log("params.id", params.id)
+
     if(!getPerson.success) {
         error(500)
     }

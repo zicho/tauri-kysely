@@ -50,8 +50,7 @@ export abstract class BaseRepository<TEntity, TNewEntity> implements IRepository
         return successfulOperation<TEntity>({ data });
       else return failedOperation({ message: `Could not find record with id '${id}' in table '${this.table}'` });
     } catch (error) {
-      return failedOperation({ error });
-    }
+      return failedOperation({ error });    }
   }
 
   async getAll(): Promise<TDbOperation<TEntity[]>> {

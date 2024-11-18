@@ -21,6 +21,7 @@ export function failedOperation<T>({
 } = {}): TDbOperation<T> {
   const errorMessage = error && typeof error === "object" && "message" in error ? (error as { message: string }).message : "Unknown error";
 
+  console.error(error)
   console.error(errorMessage);
   
   return {

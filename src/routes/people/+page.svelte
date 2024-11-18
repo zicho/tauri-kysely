@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Table from '$lib/components/table/Table.svelte';
 	import { PersonRepository } from '$lib/db/repos/PersonRepository.js';
 	import type { Person } from '$lib/db/schema/schema.js';
@@ -12,25 +13,18 @@
 	let { data } = $props();
 	let { persons } = $state(data);
 
-	// async function onDelete(id: number) {
-	// 	ModalHelper.confirmDialog({
-	// 		message: 'Delete person?',
-	// 		confirmAction: () => confirmDelete(id)
-	// 	});
-	// }
-
 	async function onDelete(p: Person) {
+		ModalHelper.confirmDialog({
+			message: 'Delete person?',
+			confirmAction: () => confirmDelete(p)
+		});
+	}
+
+	async function confirmDelete(p: Person) {
 		const result = await new PersonRepository().delete({ id: p.id });
 
-		console.dir(p.id)
-
 		if (result.success) {
-			console.log("length:", persons.length)
-			console.log("id deleted", p.id)
-			
-			persons = persons.filter((person) => person.id !== p.id);
-			console.log("length:", persons.length)
-			
+			persons = persons.filter((person) => person.id !== p.id);			
 			ModalHelper.messageDialog({ message: 'Person was deleted!' });
 		} else {
 			ModalHelper.messageDialog({ message: 'Person was not deleted due to error' });
@@ -45,6 +39,8 @@
 
 		persons = persons.filter((person) => !ids.includes(person.id));
 	}
+
+
 </script>
 
 <Table
@@ -52,7 +48,7 @@
 	bind:data={persons}
 	headers={[
 		{
-			name: 'Name',
+			name: 'First name',
 			property: 'first_name'
 		},
 		{
@@ -61,7 +57,9 @@
 		}
 	]}
 	{onDelete}
-/>
+	onEdit={(p: Person) => goto(`/people/edit/${p.id}`)} />
+
+
 
 <!-- <div class="flex flex-col">
 	<button class="btn btn-error" disabled={numSelected === 0} onclick={deleteRange}

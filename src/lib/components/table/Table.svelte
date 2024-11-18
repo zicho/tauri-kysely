@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type TableRowModel } from '$lib/viewmodels/ListPeopleViewModel';
+	import { TableRowModelMapper, type TableRowModel } from '$lib/viewmodels/ListPeopleViewModel';
 	import { Trash2, Edit, CircleX } from 'lucide-svelte';
 
 	type TableHeader<T> = {
@@ -11,14 +11,14 @@
 		headers: TableHeader<T>[];
 		data: TableRowModel<T>[];
 		primaryKey: keyof T;
-		onEdit?: () => T; // Function that receives the primary key value of a row for editing
+		onEdit?: (t: T) => void; // Function that receives the primary key value of a row for editing
 		onDelete?: (t: T) => void; // Function that receives the primary key value of a row for deletion
 		onDeleteMany?: () => T[];
 	};
 
 	type T = $$Generic;
 
-	let { data = $bindable(), headers, primaryKey, onDelete }: TableProps<T> = $props();
+	let { data = $bindable(), headers, primaryKey, onEdit, onDelete }: TableProps<T> = $props();
 
 	let allSelected = $state(false);
 
@@ -41,12 +41,18 @@
 	);
 
 	async function onAllSelectedClick() {
+		// return;
 		const filteredIds = filteredData.map((row) => row[primaryKey]);
 
-		data = data.map((row) => ({
-			...row,
-			selected: filteredIds.includes(row[primaryKey]) ? !allSelected : row.selected
-		}));
+		console.dir(filteredIds.length);
+
+		filteredData
+			.filter((x) => filteredIds.includes(x[primaryKey]))
+			.forEach((x) => (x.selected = !allSelected));
+		// data = data.map((row) => ({
+		// 	...row,
+		// 	selected: filteredIds.includes(row[primaryKey]) ? !allSelected : row.selected
+		// }));
 	}
 
 	let numSelected = $derived(data.filter((x) => x.selected).length);
@@ -111,7 +117,10 @@
 							<td class="px-4 py-2">{row[header.property]}</td>
 						{/each}
 						<td class="px-4 py-2 flex justify-end gap-x-4">
-							<button class="text-gray-600 hover:text-blue-600">
+							<button
+								onclick={() => onEdit && onEdit(row)}
+								class="text-gray-600 hover:text-blue-600"
+							>
 								<Edit class="w-5 h-5" />
 							</button>
 
